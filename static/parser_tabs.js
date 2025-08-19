@@ -46,10 +46,145 @@ function showTab(tabId) {
                         select.appendChild(opt);
                     });
                 }
+                
+                // Update button states after populating dropdowns
+                updateReportButtonStates();
             })
             .catch(error => {
                 console.error('Error fetching dropdown data:', error);
             });
+    }
+    
+    // --- Helper to add event listeners to report dropdowns ---
+    function addReportDropdownListeners() {
+        // Add change event listeners to all report dropdowns
+        const allReportSelects = [
+            // Unmatched Bank Report
+            'unmatched-bank-code-select',
+            'unmatched-acct-no-select',
+            'unmatched-statement-month-select',
+            'unmatched-statement-year-select',
+            // Unmatched Tally Report
+            'unmatched-tally-bank-code-select',
+            'unmatched-tally-acct-no-select',
+            'unmatched-tally-statement-month-select',
+            'unmatched-tally-statement-year-select',
+            // Bank-Fin Matched Report
+            'bank-fin-matched-bank-code-select',
+            'bank-fin-matched-acct-no-select',
+            'bank-fin-matched-statement-month-select',
+            'bank-fin-matched-statement-year-select',
+            // Bank-Fin-Tally Matched Report
+            'bank-fin-tally-matched-bank-code-select',
+            'bank-fin-tally-matched-acct-no-select',
+            'bank-fin-tally-matched-statement-month-select',
+            'bank-fin-tally-matched-statement-year-select',
+            // Bank-Tally Matched Report
+            'bank-tally-matched-bank-code-select',
+            'bank-tally-matched-acct-no-select',
+            'bank-tally-matched-statement-month-select',
+            'bank-tally-matched-statement-year-select'
+        ];
+        
+        allReportSelects.forEach(selectId => {
+            const select = document.getElementById(selectId);
+            if (select) {
+                select.addEventListener('change', updateReportButtonStates);
+            }
+        });
+    }
+    
+    // --- Helper to update report button states ---
+    function updateReportButtonStates() {
+        // Update Unmatched Bank Report buttons
+        const unmatchedBankSelects = [
+            'unmatched-bank-code-select',
+            'unmatched-acct-no-select', 
+            'unmatched-statement-month-select',
+            'unmatched-statement-year-select'
+        ];
+        const unmatchedBankBtn = document.getElementById('unmatched-bank-btn');
+        const unmatchedBankExcelBtn = document.getElementById('unmatched-bank-excel-btn');
+        if (unmatchedBankBtn && unmatchedBankExcelBtn) {
+            const allPopulated = unmatchedBankSelects.every(id => {
+                const select = document.getElementById(id);
+                return select && select.value;
+            });
+            unmatchedBankBtn.disabled = !allPopulated;
+            unmatchedBankExcelBtn.disabled = !allPopulated;
+        }
+        
+        // Update Unmatched Tally Report buttons
+        const unmatchedTallySelects = [
+            'unmatched-tally-bank-code-select',
+            'unmatched-tally-acct-no-select',
+            'unmatched-tally-statement-month-select', 
+            'unmatched-tally-statement-year-select'
+        ];
+        const unmatchedTallyBtn = document.getElementById('unmatched-tally-btn');
+        const unmatchedTallyExcelBtn = document.getElementById('unmatched-tally-excel-btn');
+        if (unmatchedTallyBtn && unmatchedTallyExcelBtn) {
+            const allPopulated = unmatchedTallySelects.every(id => {
+                const select = document.getElementById(id);
+                return select && select.value;
+            });
+            unmatchedTallyBtn.disabled = !allPopulated;
+            unmatchedTallyExcelBtn.disabled = !allPopulated;
+        }
+        
+        // Update Bank-Fin Matched Report buttons
+        const bankFinMatchedSelects = [
+            'bank-fin-matched-bank-code-select',
+            'bank-fin-matched-acct-no-select',
+            'bank-fin-matched-statement-month-select',
+            'bank-fin-matched-statement-year-select'
+        ];
+        const bankFinMatchedBtn = document.getElementById('bank-fin-matched-btn');
+        const bankFinMatchedExcelBtn = document.getElementById('bank-fin-matched-excel-btn');
+        if (bankFinMatchedBtn && bankFinMatchedExcelBtn) {
+            const allPopulated = bankFinMatchedSelects.every(id => {
+                const select = document.getElementById(id);
+                return select && select.value;
+            });
+            bankFinMatchedBtn.disabled = !allPopulated;
+            bankFinMatchedExcelBtn.disabled = !allPopulated;
+        }
+        
+        // Update Bank-Fin-Tally Matched Report buttons
+        const bankFinTallyMatchedSelects = [
+            'bank-fin-tally-matched-bank-code-select',
+            'bank-fin-tally-matched-acct-no-select',
+            'bank-fin-tally-matched-statement-month-select',
+            'bank-fin-tally-matched-statement-year-select'
+        ];
+        const bankFinTallyMatchedBtn = document.getElementById('bank-fin-tally-matched-btn');
+        const bankFinTallyMatchedExcelBtn = document.getElementById('bank-fin-tally-matched-excel-btn');
+        if (bankFinTallyMatchedBtn && bankFinTallyMatchedExcelBtn) {
+            const allPopulated = bankFinTallyMatchedSelects.every(id => {
+                const select = document.getElementById(id);
+                return select && select.value;
+            });
+            bankFinTallyMatchedBtn.disabled = !allPopulated;
+            bankFinTallyMatchedExcelBtn.disabled = !allPopulated;
+        }
+        
+        // Update Bank-Tally Matched Report buttons
+        const bankTallyMatchedSelects = [
+            'bank-tally-matched-bank-code-select',
+            'bank-tally-matched-acct-no-select',
+            'bank-tally-matched-statement-month-select',
+            'bank-tally-matched-statement-year-select'
+        ];
+        const bankTallyMatchedBtn = document.getElementById('bank-tally-matched-btn');
+        const bankTallyMatchedExcelBtn = document.getElementById('bank-tally-matched-excel-btn');
+        if (bankTallyMatchedBtn && bankTallyMatchedExcelBtn) {
+            const allPopulated = bankTallyMatchedSelects.every(id => {
+                const select = document.getElementById(id);
+                return select && select.value;
+            });
+            bankTallyMatchedBtn.disabled = !allPopulated;
+            bankTallyMatchedExcelBtn.disabled = !allPopulated;
+        }
     }
 
     // --- Bank-Fin Match Tab ---
@@ -92,6 +227,10 @@ function showTab(tabId) {
         populateDropdown('/get_bank_data_acct_nos', 'bank-data-table-acct-no-select');
         populateDropdown('/get_bank_data_statement_months', 'bank-data-table-statement-month-select');
         populateDropdown('/get_bank_data_statement_years', 'bank-data-table-statement-year-select');
+        
+        // Add event listeners to update button states
+        addReportDropdownListeners();
+        
         const resultDiv = document.getElementById('bank-data-table-result');
         function getFilters() {
             return {
@@ -2284,6 +2423,12 @@ if (document.getElementById('finance-data-table-reset-btn')) {
         if (typeof loadFinanceDataTable === 'function') loadFinanceDataTable();
     };
 }
+
+// Initialize report dropdown listeners when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    addReportDropdownListeners();
+    updateReportButtonStates();
+});
 
 
 
