@@ -93,7 +93,7 @@ hr {
 .parser-row { 
     display: flex; 
     align-items: center; 
-    gap: 16px; 
+    gap: 12px; 
 }
 .parser-label { 
     min-width: 100px; 
@@ -130,11 +130,12 @@ hr {
 .report-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 14px;
+    font-size: 12px;
     background: #fff;
 }
 .report-table th, .report-table td {
     border: 1px solid #e1e6ef;
+    font-size: 12px;
 }
 .report-table th {
     background: #f8f9fa;
@@ -142,10 +143,12 @@ hr {
     font-weight: 700;
     text-align: left;
     padding: 8px 12px;
+    font-size: 12px;
 }
 .report-table td {
     text-align: left;
     padding: 8px 12px;
+    font-size: 12px;
 }
 .report-table tr:nth-child(even) {
     background: #f6f7fa;
@@ -245,13 +248,6 @@ hr {
     box-shadow: 0 0 8px rgba(0,0,0,0.05);
 }
 
-.btn-success {
-    /* Bootstrap btn-success styling will be applied automatically */
-}
-.btn-success:hover {
-    /* Bootstrap hover state will be handled automatically */
-}
-
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Ubuntu', 'Segoe UI', sans-serif;
 }
@@ -284,10 +280,6 @@ h1, h2, h3, h4, h5, h6 {
     height: 32px;
     line-height: 1.2;
     box-sizing: border-box;
-}
-
-#bank-bankSelect {
-    /* Remove custom margin to ensure proper alignment */
 }
 
 /* Full width for Unmatched Bank Report card */

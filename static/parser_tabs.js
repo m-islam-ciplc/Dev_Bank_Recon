@@ -228,8 +228,11 @@ function showTab(tabId) {
         populateDropdown('/get_bank_data_statement_months', 'bank-data-table-statement-month-select');
         populateDropdown('/get_bank_data_statement_years', 'bank-data-table-statement-year-select');
         
-        // Add event listeners to update button states
-        addReportDropdownListeners();
+            // Add event listeners to update button states
+    addReportDropdownListeners();
+    
+    // Initialize button states
+    updateReportButtonStates();
         
         const resultDiv = document.getElementById('bank-data-table-result');
         function getFilters() {
@@ -478,31 +481,7 @@ function showTab(tabId) {
     }
 }
 
-function fetchAndSetBanks(selectId) {
-    const bankSelect = document.getElementById(selectId);
-    bankSelect.innerHTML = '<option value="">Loading...</option>';
-    fetch('/get_banks', {
-        method: 'POST'
-    })
-    .then(resp => resp.json())
-    .then(data => {
-        bankSelect.innerHTML = '';
-        if(data.success && data.banks.length > 0) {
-            bankSelect.innerHTML = '<option value="">-- Select Bank --</option>';
-            data.banks.forEach(function(code) {
-                const opt = document.createElement('option');
-                opt.value = code;
-                opt.text = code;
-                bankSelect.appendChild(opt);
-            });
-        } else {
-            bankSelect.innerHTML = '<option value="">No banks found</option>';
-        }
-    })
-    .catch(() => {
-        bankSelect.innerHTML = '<option value="">Error</option>';
-    });
-}
+
 
 document.querySelectorAll('.parser-form').forEach(function(form) {
     if(form.id === "reconcile-form" || form.id === "bft-reconcile-form" || form.id === "bank-tally-reconcile-form") return;
@@ -663,42 +642,7 @@ document.querySelectorAll('.parser-form').forEach(function(form) {
     updateParseButtonState();
 });
 
-// --- Account dropdown logic for Bank-Fin Match ---
-// const bankTableSelect = document.getElementById('bank-table-select');
-// const accountNumberSelect = document.getElementById('account-number-select');
 
-// function fetchAndSetAccounts() {
-//     const bank_table = bankTableSelect.value;
-//     accountNumberSelect.innerHTML = '<option value="">Loading...</option>';
-//     fetch('/get_accounts', {
-//         method: 'POST',
-//         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-//         body: `bank_table=${encodeURIComponent(bank_table)}`
-//     })
-//     .then(resp => resp.json())
-//     .then(data => {
-//         accountNumberSelect.innerHTML = '';
-//         if(data.success && data.accounts.length > 0){
-//             accountNumberSelect.innerHTML = '<option value="">-- Select Account --</option>';
-//             data.accounts.forEach(function(acct){
-//                 const opt = document.createElement('option');
-//                 opt.value = acct;
-//                 opt.text = acct;
-//                 accountNumberSelect.appendChild(opt);
-//             });
-//         } else {
-//             accountNumberSelect.innerHTML = '<option value="">No accounts found</option>';
-//         }
-//     })
-//     .catch(() => {
-//         accountNumberSelect.innerHTML = '<option value="">Error</option>';
-//     });
-// }
-
-// if (bankTableSelect) {
-//     fetchAndSetAccounts();
-//     bankTableSelect.addEventListener('change', fetchAndSetAccounts);
-// }
 
 
 
@@ -737,63 +681,6 @@ if (bankCodeSelect) {
     fetchAndSetAccounts();
     bankCodeSelect.addEventListener('change', fetchAndSetAccounts);
 }
-
-
-
-
-// --- FINAL MINIMAL RECONCILE SCRIPT (UPDATED) ---
-// document.getElementById('reconcile-form').addEventListener('submit', function(e) {
-//     e.preventDefault();
-//     const btn = document.getElementById('reconcile-btn');
-//     btn.disabled = true;
-//     btn.textContent = 'Reconciling...';
-//     const resultDiv = document.getElementById('reconcile-result');
-//     resultDiv.textContent = 'Working...';
-
-//     // const bank_table = bankTableSelect.value;
-//     // const account_number = accountNumberSelect.value;
-//     // const bank_code = bankTableSelect.selectedOptions[0].getAttribute('data-code');
-//     // const fin_table = 'fin_data';
-
-//     // const formData = new URLSearchParams();
-//     // formData.append('bank_table', bank_table);
-//     // formData.append('fin_table', fin_table);
-//     // formData.append('bank_code', bank_code);
-//     // formData.append('account_number', account_number);
-
-//     const bank_code = document.getElementById('bank-code-select').value;
-//     const account_number = document.getElementById('account-number-select').value;
-
-//     const formData = new URLSearchParams();
-//     formData.append('bank_code', bank_code);
-//     formData.append('account_number', account_number);
-
-
-//     fetch('/reconcile', {
-//         method: 'POST',
-//         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-//         body: formData
-//     })
-//     .then(resp => resp.json())
-//     .then(data => {
-//         if(data.success) {
-//             resultDiv.innerText =
-//                 `Matched: ${data.matched_count}\n` +
-//                 `Unmatched (Bank): ${data.unmatched_bank_count}\n` +
-//                 `Unmatched (Finance): ${data.unmatched_finance_count}`;
-//         } else {
-//             resultDiv.innerText = data.msg || 'Unknown error';
-//         }
-//     })
-//     .catch(err => {
-//         resultDiv.innerText = `Error: ${err}`;
-//     })
-//     .finally(() => {
-//         btn.disabled = false;
-//         btn.textContent = 'Reconcile';
-//     });
-// });
-
 
 
 document.getElementById('reconcile-form').addEventListener('submit', function(e) {
@@ -1131,30 +1018,6 @@ if (document.getElementById('bank-tally-bank-code-select')) {
 
 // --- Reports Tab: Unmatched Bank Report ---
 
-// Helper: Fetch unique bank codes
-function fetchUnmatchedBankCodes() {
-    const select = document.getElementById('unmatched-bank-code-select');
-    select.innerHTML = '<option value="">Loading...</option>';
-    fetch('/get_bank_codes', { method: 'GET' })
-        .then(resp => resp.json())
-        .then(data => {
-            select.innerHTML = '<option value="">-- Select Bank --</option>';
-            if (data.success && data.bank_codes.length) {
-                data.bank_codes.forEach(code => {
-                    const opt = document.createElement('option');
-                    opt.value = code;
-                    opt.text = code;
-                    select.appendChild(opt);
-                });
-            } else {
-                select.innerHTML = '<option value="">No banks found</option>';
-            }
-        })
-        .catch(() => {
-            select.innerHTML = '<option value="">Error</option>';
-        });
-}
-
 // Helper: Fetch unique account numbers for selected bank code
 function fetchUnmatchedAcctNos() {
     const bankCode = document.getElementById('unmatched-bank-code-select').value;
@@ -1184,54 +1047,6 @@ function fetchUnmatchedAcctNos() {
         });
 }
 
-// Helper: Fetch unique years for statement_year dropdown
-function fetchUnmatchedStatementYears() {
-    const select = document.getElementById('unmatched-statement-year-select');
-    select.innerHTML = '<option value="">Loading...</option>';
-    fetch('/get_statement_years', { method: 'GET' })
-    .then(resp => resp.json())
-    .then(data => {
-            select.innerHTML = '<option value="">-- Select Year --</option>';
-            if (data.success && data.years.length) {
-                data.years.forEach(year => {
-                    const opt = document.createElement('option');
-                    opt.value = year;
-                    opt.text = year;
-                    select.appendChild(opt);
-                });
-            } else {
-                select.innerHTML = '<option value="">No years found</option>';
-            }
-        })
-        .catch(() => {
-            select.innerHTML = '<option value="">Error</option>';
-        });
-}
-
-// Helper: Fetch unique months for statement_month dropdown
-function fetchUnmatchedStatementMonths() {
-    const select = document.getElementById('unmatched-statement-month-select');
-    select.innerHTML = '<option value="">Loading...</option>';
-    fetch('/get_statement_months', { method: 'GET' })
-        .then(resp => resp.json())
-        .then(data => {
-            select.innerHTML = '<option value="">-- Select Month --</option>';
-            if (data.success && data.months.length) {
-                data.months.forEach(month => {
-                    const opt = document.createElement('option');
-                    opt.value = month;
-                    opt.text = month;
-                    select.appendChild(opt);
-                });
-        } else {
-                select.innerHTML = '<option value="">No months found</option>';
-            }
-        })
-        .catch(() => {
-            select.innerHTML = '<option value="">Error</option>';
-        });
-}
-
 // Populate filters on tab show - now handled in showTab function
 if (document.getElementById('unmatched-bank-code-select')) {
     document.getElementById('unmatched-bank-code-select').addEventListener('change', fetchUnmatchedAcctNos);
@@ -1243,8 +1058,7 @@ const unmatchedBankColumnOrder = [
     'B_Date', 'B_Particulars', 'B_Ref_Cheque', 'B_Withdrawal', 'B_Deposit', 'bank_ven'
 ];
 
-// --- Date columns for formatting ---
-const unmatchedBankDateColumns = ['B_Date'];
+
 
 // Handle form submission
 const unmatchedForm = document.getElementById('unmatched-bank-form');
@@ -1494,8 +1308,7 @@ function fetchUnmatchedTallyStatementMonths() {
         });
 }
 
-// --- Date columns for formatting ---
-const unmatchedTallyDateColumns = ['T_Date'];
+
 
 // Populate filters on tab show for tally - now handled in showTab function
 if (document.getElementById('unmatched-tally-bank-code-select')) {
