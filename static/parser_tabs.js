@@ -268,6 +268,12 @@ function showTab(tabId) {
                     });
                     html += '</table></div>';
                     resultDiv.innerHTML = html;
+                    
+                    // Ensure the newly created table fits within viewport
+                    const newTable = resultDiv.querySelector('table');
+                    if (newTable) {
+                        ensureTableFitViewport(newTable);
+                    }
                 } else if (data.success && data.data.length === 0) {
                     resultDiv.textContent = 'No records found.';
                 } else {
@@ -334,6 +340,12 @@ function showTab(tabId) {
                     });
                     html += '</table></div>';
                     resultDiv.innerHTML = html;
+                    
+                    // Ensure the newly created table fits within viewport
+                    const newTable = resultDiv.querySelector('table');
+                    if (newTable) {
+                        ensureTableFitViewport(newTable);
+                    }
                 } else if (data.success && data.data.length === 0) {
                     resultDiv.textContent = 'No records found.';
                 } else {
@@ -398,6 +410,12 @@ function showTab(tabId) {
                     });
                     html += '</table></div>';
                     resultDiv.innerHTML = html;
+                    
+                    // Ensure the newly created table fits within viewport
+                    const newTable = resultDiv.querySelector('table');
+                    if (newTable) {
+                        ensureTableFitViewport(newTable);
+                    }
                 } else if (data.success && data.data.length === 0) {
                     resultDiv.textContent = 'No records found.';
                 } else {
@@ -1108,6 +1126,12 @@ if (unmatchedForm) {
                     });
                     html += '</table>';
                     resultDiv.innerHTML = html;
+                    
+                    // Ensure the newly created table fits within viewport
+                    const newTable = resultDiv.querySelector('table');
+                    if (newTable) {
+                        ensureTableFitViewport(newTable);
+                    }
                 }
         } else {
                 resultDiv.textContent = 'Error: ' + (data.msg || 'Failed to generate report');
@@ -1439,6 +1463,12 @@ if (unmatchedTallyForm) {
                     });
                     html += '</table>';
                     resultDiv.innerHTML = html;
+                    
+                    // Ensure the newly created table fits within viewport
+                    const newTable = resultDiv.querySelector('table');
+                    if (newTable) {
+                        ensureTableFitViewport(newTable);
+                    }
                 }
             } else {
                 resultDiv.textContent = 'Error: ' + (data.msg || 'Failed to generate report');
@@ -1628,6 +1658,12 @@ if (bfMatchedForm) {
                     });
                     html += '</table>';
                     resultDiv.innerHTML = html;
+                    
+                    // Ensure the newly created table fits within viewport
+                    const newTable = resultDiv.querySelector('table');
+                    if (newTable) {
+                        ensureTableFitViewport(newTable);
+                    }
                 }
             } else {
                 resultDiv.textContent = 'Error: ' + (data.msg || 'Failed to generate report');
@@ -1850,6 +1886,12 @@ if (bftMatchedForm) {
                     });
                     html += '</table>';
                     resultDiv.innerHTML = html;
+                    
+                    // Ensure the newly created table fits within viewport
+                    const newTable = resultDiv.querySelector('table');
+                    if (newTable) {
+                        ensureTableFitViewport(newTable);
+                    }
                 }
             } else {
                 resultDiv.textContent = 'Error: ' + (data.msg || 'Failed to generate report');
@@ -2058,6 +2100,12 @@ if (btMatchedForm) {
                     });
                     html += '</table>';
                     resultDiv.innerHTML = html;
+                    
+                    // Ensure the newly created table fits within viewport
+                    const newTable = resultDiv.querySelector('table');
+                    if (newTable) {
+                        ensureTableFitViewport(newTable);
+                    }
                 }
             } else {
                 resultDiv.textContent = 'Error: ' + (data.msg || 'Failed to generate report');
@@ -2241,7 +2289,38 @@ if (document.getElementById('finance-data-table-reset-btn')) {
 document.addEventListener('DOMContentLoaded', function() {
     addReportDropdownListeners();
     updateReportButtonStates();
+    
+    // Handle window resize to ensure tables fit viewport
+    window.addEventListener('resize', function() {
+        const allTables = document.querySelectorAll('.report-table');
+        allTables.forEach(table => {
+            ensureTableFitViewport(table);
+        });
+    });
 });
+
+// --- Helper to ensure tables fit within viewport ---
+function ensureTableFitViewport(tableElement) {
+    if (!tableElement) return;
+    
+    // Get the table wrapper
+    const wrapper = tableElement.closest('.report-table-wrapper');
+    if (wrapper) {
+        // Ensure wrapper doesn't exceed viewport width
+        const viewportWidth = window.innerWidth;
+        const wrapperWidth = wrapper.offsetWidth;
+        
+        if (wrapperWidth > viewportWidth) {
+            wrapper.style.maxWidth = `${viewportWidth - 100}px`; // Leave some margin
+            wrapper.style.overflowX = 'auto';
+        }
+    }
+    
+    // Add responsive class for mobile
+    if (window.innerWidth <= 768) {
+        tableElement.classList.add('table-responsive');
+    }
+}
 
 
 
