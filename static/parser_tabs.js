@@ -4,11 +4,17 @@ function showTab(tabId) {
     document.querySelectorAll('.tab-pane').forEach(function(pane) {
         pane.style.display = 'none';
     });
-    document.querySelectorAll('.tab-btn').forEach(function(btn) {
-        btn.removeAttribute('data-active');
-    });
+    
+    // Only set data-active for elements that exist (data table tabs)
+    const btnElement = document.getElementById('btn-' + tabId);
+    if (btnElement) {
+        document.querySelectorAll('.tab-btn').forEach(function(btn) {
+            btn.removeAttribute('data-active');
+        });
+        btnElement.setAttribute('data-active','1');
+    }
+    
     document.getElementById('pane-' + tabId).style.display = 'block';
-    document.getElementById('btn-' + tabId).setAttribute('data-active','1');
 
     // --- Helper to populate dropdowns ---
     function populateDropdown(endpoint, selectId) {
@@ -21,7 +27,7 @@ function showTab(tabId) {
                 if (selectId.includes('acct-no')) key = 'acct_nos';
                 if (selectId.includes('month')) key = 'months';
                 if (selectId.includes('year')) key = 'years';
-                select.innerHTML = '<option value="">-- Select --</option>';
+                select.innerHTML = '<option value="">-- Select Bank --</option>';
                 if (data.success && data[key] && data[key].length) {
                     data[key].forEach(val => {
                         const opt = document.createElement('option');
@@ -30,16 +36,45 @@ function showTab(tabId) {
                         select.appendChild(opt);
                     });
                 }
+            })
+            .catch(error => {
+                console.error('Error fetching dropdown data:', error);
             });
     }
 
     // --- Bank-Fin Match Tab ---
     if (tabId === 'reconcile') {
-        // Populate bank and account dropdowns
+        // Populate bank codes dropdown
         populateDropdown('/get_bank_codes', 'bank-code-select');
-        populateDropdown('/get_acct_nos', 'account-number-select');
+        // Clear account dropdown initially
+        const accountSelect = document.getElementById('account-number-select');
+        if (accountSelect) {
+            accountSelect.innerHTML = '<option value="">-- Select Account --</option>';
+        }
     }
-    
+
+    // --- Bank-Fin-Tally Match Tab ---
+    if (tabId === 'bft-reconcile') {
+        // Populate bank codes dropdown
+        populateDropdown('/get_bank_codes', 'bft-bank-code-select');
+        // Clear account dropdown initially
+        const accountSelect = document.getElementById('bft-account-number-select');
+        if (accountSelect) {
+            accountSelect.innerHTML = '<option value="">-- Select Account --</option>';
+        }
+    }
+
+    // --- Bank-Tally Match Tab ---
+    if (tabId === 'bank-tally-reconcile') {
+        // Populate bank codes dropdown
+        populateDropdown('/get_bank_codes', 'bank-tally-bank-code-select');
+        // Clear account dropdown initially
+        const accountSelect = document.getElementById('bank-tally-account-number-select');
+        if (accountSelect) {
+            accountSelect.innerHTML = '<option value="">-- Select Account --</option>';
+        }
+    }
+
     // --- Bank Data Table ---
     if (tabId === 'bank-data-table') {
         // Populate all filters
@@ -235,6 +270,62 @@ function showTab(tabId) {
             if (el) el.onchange = loadFinanceDataTable;
         });
         window.loadFinanceDataTable = loadFinanceDataTable;
+    }
+
+    // --- Reports Tabs ---
+    if (tabId === 'unmatched-bank-report') {
+        populateDropdown('/get_bank_codes', 'unmatched-bank-code-select');
+        populateDropdown('/get_statement_years', 'unmatched-statement-year-select');
+        populateDropdown('/get_statement_months', 'unmatched-statement-month-select');
+        // Clear account dropdown initially
+        const accountSelect = document.getElementById('unmatched-acct-no-select');
+        if (accountSelect) {
+            accountSelect.innerHTML = '<option value="">-- Select Account --</option>';
+        }
+    }
+
+    if (tabId === 'unmatched-tally-report') {
+        populateDropdown('/get_tally_bank_codes', 'unmatched-tally-bank-code-select');
+        populateDropdown('/get_tally_statement_years', 'unmatched-tally-statement-year-select');
+        populateDropdown('/get_tally_statement_months', 'unmatched-tally-statement-month-select');
+        // Clear account dropdown initially
+        const accountSelect = document.getElementById('unmatched-tally-acct-no-select');
+        if (accountSelect) {
+            accountSelect.innerHTML = '<option value="">-- Select Account --</option>';
+        }
+    }
+
+    if (tabId === 'bank-fin-matched-report') {
+        populateDropdown('/get_bank_codes', 'bank-fin-matched-bank-code-select');
+        populateDropdown('/get_statement_years', 'bank-fin-matched-statement-year-select');
+        populateDropdown('/get_statement_months', 'bank-fin-matched-statement-month-select');
+        // Clear account dropdown initially
+        const accountSelect = document.getElementById('bank-fin-matched-acct-no-select');
+        if (accountSelect) {
+            accountSelect.innerHTML = '<option value="">-- Select Account --</option>';
+        }
+    }
+
+    if (tabId === 'bank-fin-tally-matched-report') {
+        populateDropdown('/get_bank_codes', 'bank-fin-tally-matched-bank-code-select');
+        populateDropdown('/get_statement_years', 'bank-fin-tally-matched-statement-year-select');
+        populateDropdown('/get_statement_months', 'bank-fin-tally-matched-statement-month-select');
+        // Clear account dropdown initially
+        const accountSelect = document.getElementById('bank-fin-tally-matched-acct-no-select');
+        if (accountSelect) {
+            accountSelect.innerHTML = '<option value="">-- Select Account --</option>';
+        }
+    }
+
+    if (tabId === 'bank-tally-matched-report') {
+        populateDropdown('/get_bank_codes', 'bank-tally-matched-bank-code-select');
+        populateDropdown('/get_statement_years', 'bank-tally-matched-statement-year-select');
+        populateDropdown('/get_statement_months', 'bank-tally-matched-statement-month-select');
+        // Clear account dropdown initially
+        const accountSelect = document.getElementById('bank-tally-matched-acct-no-select');
+        if (accountSelect) {
+            accountSelect.innerHTML = '<option value="">-- Select Account --</option>';
+        }
     }
 }
 
@@ -860,10 +951,6 @@ function populateYearDropdown(selectId, bankCode, endpointOverride) {
 
 // --- Bank-Fin Match Tab ---
 if (document.getElementById('bank-code-select')) {
-    populateBankDropdown('bank-code-select', function() {
-        const bankCode = document.getElementById('bank-code-select').value;
-        populateAccountDropdown('account-number-select', bankCode);
-    });
     document.getElementById('bank-code-select').addEventListener('change', function() {
         const bankCode = this.value;
         populateAccountDropdown('account-number-select', bankCode);
@@ -872,10 +959,6 @@ if (document.getElementById('bank-code-select')) {
 
 // --- Bank-Fin-Tally Match Tab ---
 if (document.getElementById('bft-bank-code-select')) {
-    populateBankDropdown('bft-bank-code-select', function() {
-        const bankCode = document.getElementById('bft-bank-code-select').value;
-        populateAccountDropdown('bft-account-number-select', bankCode);
-    });
     document.getElementById('bft-bank-code-select').addEventListener('change', function() {
         const bankCode = this.value;
         populateAccountDropdown('bft-account-number-select', bankCode);
@@ -884,10 +967,6 @@ if (document.getElementById('bft-bank-code-select')) {
 
 // --- Bank-Tally Match Tab ---
 if (document.getElementById('bank-tally-bank-code-select')) {
-    populateBankDropdown('bank-tally-bank-code-select', function() {
-        const bankCode = document.getElementById('bank-tally-bank-code-select').value;
-        populateAccountDropdown('bank-tally-account-number-select', bankCode);
-    });
     document.getElementById('bank-tally-bank-code-select').addEventListener('change', function() {
         const bankCode = this.value;
         populateAccountDropdown('bank-tally-account-number-select', bankCode);
@@ -997,11 +1076,8 @@ function fetchUnmatchedStatementMonths() {
         });
 }
 
-// Populate filters on tab show
+// Populate filters on tab show - now handled in showTab function
 if (document.getElementById('unmatched-bank-code-select')) {
-    fetchUnmatchedBankCodes();
-    fetchUnmatchedStatementYears();
-    fetchUnmatchedStatementMonths();
     document.getElementById('unmatched-bank-code-select').addEventListener('change', fetchUnmatchedAcctNos);
 }
 
@@ -1265,11 +1341,8 @@ function fetchUnmatchedTallyStatementMonths() {
 // --- Date columns for formatting ---
 const unmatchedTallyDateColumns = ['T_Date'];
 
-// Populate filters on tab show for tally
+// Populate filters on tab show for tally - now handled in showTab function
 if (document.getElementById('unmatched-tally-bank-code-select')) {
-    fetchUnmatchedTallyBankCodes();
-    fetchUnmatchedTallyStatementYears();
-    fetchUnmatchedTallyStatementMonths();
     document.getElementById('unmatched-tally-bank-code-select').addEventListener('change', fetchUnmatchedTallyAcctNos);
 }
 
@@ -1511,11 +1584,8 @@ function fetchBFMatchedStatementMonths() {
         });
 }
 
-// Populate filters on tab show
+// Populate filters on tab show - now handled in showTab function
 if (document.getElementById('bank-fin-matched-bank-code-select')) {
-    fetchBFMatchedBankCodes();
-    fetchBFMatchedStatementYears();
-    fetchBFMatchedStatementMonths();
     document.getElementById('bank-fin-matched-bank-code-select').addEventListener('change', fetchBFMatchedAcctNos);
 }
 
@@ -1751,9 +1821,6 @@ function fetchBFTMatchedStatementMonths() {
         });
 }
 if (document.getElementById('bank-fin-tally-matched-bank-code-select')) {
-    fetchBFTMatchedBankCodes();
-    fetchBFTMatchedStatementYears();
-    fetchBFTMatchedStatementMonths();
     document.getElementById('bank-fin-tally-matched-bank-code-select').addEventListener('change', fetchBFTMatchedAcctNos);
 }
 function updateBFTMatchedReportBtnState() {
@@ -1963,9 +2030,6 @@ function fetchBTMatchedStatementMonths() {
         });
 }
 if (document.getElementById('bank-tally-matched-bank-code-select')) {
-    fetchBTMatchedBankCodes();
-    fetchBTMatchedStatementYears();
-    fetchBTMatchedStatementMonths();
     document.getElementById('bank-tally-matched-bank-code-select').addEventListener('change', fetchBTMatchedAcctNos);
 }
 function updateBTMatchedReportBtnState() {
@@ -2081,106 +2145,26 @@ if (btMatchedForm) {
 
 // --- Data Tables: Bank Data Table ---
 if (document.getElementById('bank-data-table-bank-code-select')) {
-    populateBankDropdown('bank-data-table-bank-code-select', function() {
-        const bankCode = document.getElementById('bank-data-table-bank-code-select').value;
-        populateAccountDropdown('bank-data-table-acct-no-select', bankCode);
-    });
     document.getElementById('bank-data-table-bank-code-select').addEventListener('change', function() {
         const bankCode = this.value;
         populateAccountDropdown('bank-data-table-acct-no-select', bankCode);
     });
-    // Populate months and years
-    fetch('/get_statement_months', { method: 'GET' })
-        .then(resp => resp.json())
-        .then(data => {
-            const select = document.getElementById('bank-data-table-statement-month-select');
-            select.innerHTML = '<option value="">-- Select Month --</option>';
-            if (data.success && data.months.length) {
-                data.months.forEach(month => {
-                    const opt = document.createElement('option');
-                    opt.value = month;
-                    opt.text = month;
-                    select.appendChild(opt);
-                });
-            } else {
-                select.innerHTML = '<option value="">No months found</option>';
-            }
-        });
-    fetch('/get_statement_years', { method: 'GET' })
-        .then(resp => resp.json())
-        .then(data => {
-            const select = document.getElementById('bank-data-table-statement-year-select');
-            select.innerHTML = '<option value="">-- Select Year --</option>';
-            if (data.success && data.years.length) {
-                data.years.forEach(year => {
-                    const opt = document.createElement('option');
-                    opt.value = year;
-                    opt.text = year;
-                    select.appendChild(opt);
-                });
-            } else {
-                select.innerHTML = '<option value="">No years found</option>';
-            }
-        });
 }
 // --- Data Tables: Tally Data Table ---
 if (document.getElementById('tally-data-table-bank-code-select')) {
-    populateBankDropdown('tally-data-table-bank-code-select', function() {
-        const bankCode = document.getElementById('tally-data-table-bank-code-select').value;
-        populateAccountDropdown('tally-data-table-acct-no-select', bankCode);
-    });
     document.getElementById('tally-data-table-bank-code-select').addEventListener('change', function() {
         const bankCode = this.value;
         populateAccountDropdown('tally-data-table-acct-no-select', bankCode);
     });
-    // Populate months and years
-    fetch('/get_tally_statement_months', { method: 'GET' })
-        .then(resp => resp.json())
-        .then(data => {
-            const select = document.getElementById('tally-data-table-statement-month-select');
-            select.innerHTML = '<option value="">-- Select Month --</option>';
-            if (data.success && data.months.length) {
-                data.months.forEach(month => {
-                    const opt = document.createElement('option');
-                    opt.value = month;
-                    opt.text = month;
-                    select.appendChild(opt);
-                });
-            } else {
-                select.innerHTML = '<option value="">No months found</option>';
-            }
-        });
-    fetch('/get_tally_statement_years', { method: 'GET' })
-        .then(resp => resp.json())
-        .then(data => {
-            const select = document.getElementById('tally-data-table-statement-year-select');
-            select.innerHTML = '<option value="">-- Select Year --</option>';
-            if (data.success && data.years.length) {
-                data.years.forEach(year => {
-                    const opt = document.createElement('option');
-                    opt.value = year;
-                    opt.text = year;
-                    select.appendChild(opt);
-                });
-            } else {
-                select.innerHTML = '<option value="">No years found</option>';
-            }
-        });
 }
 // --- Data Tables: Finance Data Table ---
 if (document.getElementById('finance-data-table-bank-code-select')) {
-    populateBankDropdown('finance-data-table-bank-code-select', function() {
-        const bankCode = document.getElementById('finance-data-table-bank-code-select').value;
-        populateAccountDropdown('finance-data-table-acct-no-select', bankCode, `/get_fin_data_acct_nos?bank_code=${encodeURIComponent(bankCode)}`);
-        populateMonthDropdown('finance-data-table-statement-month-select', bankCode, `/get_fin_data_statement_months?bank_code=${encodeURIComponent(bankCode)}`);
-        populateYearDropdown('finance-data-table-statement-year-select', bankCode, `/get_fin_data_statement_years?bank_code=${encodeURIComponent(bankCode)}`);
-    });
     document.getElementById('finance-data-table-bank-code-select').addEventListener('change', function() {
         const bankCode = this.value;
         populateAccountDropdown('finance-data-table-acct-no-select', bankCode, `/get_fin_data_acct_nos?bank_code=${encodeURIComponent(bankCode)}`);
         populateMonthDropdown('finance-data-table-statement-month-select', bankCode, `/get_fin_data_statement_months?bank_code=${encodeURIComponent(bankCode)}`);
         populateYearDropdown('finance-data-table-statement-year-select', bankCode, `/get_fin_data_statement_years?bank_code=${encodeURIComponent(bankCode)}`);
-        });
+    });
 }
 
 // --- Data Tables: Bank Data Table Form Submission ---
@@ -2220,12 +2204,12 @@ if (bankDataTableForm) {
                 resultDiv.textContent = data.msg || 'Failed to fetch data.';
             }
         })
-        .catch(() => {
-            resultDiv.textContent = 'Error fetching data.';
+        .catch(err => {
+            resultDiv.textContent = 'Error: ' + err;
         })
         .finally(() => {
             btn.disabled = false;
-            btn.textContent = 'Show Table';
+            btn.textContent = 'Generate Report';
         });
     });
 }
@@ -2283,3 +2267,7 @@ if (document.getElementById('finance-data-table-reset-btn')) {
         if (typeof loadFinanceDataTable === 'function') loadFinanceDataTable();
     };
 }
+
+
+
+
