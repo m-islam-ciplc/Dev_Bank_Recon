@@ -24,10 +24,20 @@ function showTab(tabId) {
                 const select = document.getElementById(selectId);
                 if (!select) return;
                 let key = 'bank_codes';
-                if (selectId.includes('acct-no')) key = 'acct_nos';
-                if (selectId.includes('month')) key = 'months';
-                if (selectId.includes('year')) key = 'years';
-                select.innerHTML = '<option value="">-- Select Bank --</option>';
+                let defaultText = '-- Select Bank --';
+                
+                if (selectId.includes('acct-no')) {
+                    key = 'acct_nos';
+                    defaultText = '-- Select Account --';
+                } else if (selectId.includes('month')) {
+                    key = 'months';
+                    defaultText = '-- Select Month --';
+                } else if (selectId.includes('year')) {
+                    key = 'years';
+                    defaultText = '-- Select Year --';
+                }
+                
+                select.innerHTML = `<option value="">${defaultText}</option>`;
                 if (data.success && data[key] && data[key].length) {
                     data[key].forEach(val => {
                         const opt = document.createElement('option');
@@ -361,7 +371,7 @@ document.querySelectorAll('.parser-form').forEach(function(form) {
     const fileInput = form.querySelector('.file-input');
     const sheetRow = form.querySelector('[id$="-sheetRow"]');
     const sheetSelect = form.querySelector('.sheet-select');
-    const parseBtn = form.querySelector('.parser-parse-btn');
+    const parseBtn = form.querySelector('button[type="submit"]');
     const msgDiv = form.nextElementSibling;
     const uploadedDiv = msgDiv.nextElementSibling;
     let sheetNames = [];
@@ -395,6 +405,13 @@ document.querySelectorAll('.parser-form').forEach(function(form) {
             if (uploadedDiv) uploadedDiv.textContent = "";
             if (parseBtn) parseBtn.disabled = true;
             if (sheetRow) sheetRow.style.display = "none";
+            
+            // Update file name display
+            const fileChosenSpan = fileInput.nextElementSibling;
+            if (fileChosenSpan && fileChosenSpan.classList.contains('file-chosen')) {
+                fileChosenSpan.textContent = fileInput.files[0] ? fileInput.files[0].name : 'No file chosen';
+            }
+            
         if (!fileInput.files.length) {
             updateParseButtonState();
             return;

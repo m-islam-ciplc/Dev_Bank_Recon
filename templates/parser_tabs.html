@@ -111,7 +111,7 @@
                     {% if parser.id == "bank" %}
                     <!-- Bank Name Dropdown for Bank Statement Parser tab -->
                     <div class="parser-row" id="bank-bankRow">
-                        <button type="button" class="parser-label parser-file-btn" onclick="this.nextElementSibling.focus()">Select Bank</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="this.nextElementSibling.focus()">Select Bank</button>
                         <select name="bank_name" class="parser-input" id="bank-bankSelect" required>
                             <option value="">-- Select Bank --</option>
                             <option value="MTB">Mutual Trust Bank</option>
@@ -122,10 +122,10 @@
                     {% endif %}
 
                     <div class="parser-row">
-                        <button type="button" class="parser-label parser-file-btn" onclick="this.nextElementSibling.click()">Select File</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="this.nextElementSibling.click()">Select File</button>
                         <input type="file" name="{{parser.file_field}}" class="parser-input file-input" style="display:none;"
-                               {% if parser.id == 'bank' %}accept=".xls,.xlsx,.csv"{% endif %} required onchange="this.nextElementSibling.innerText = this.files[0] ? this.files[0].name : 'No file chosen'">
-                        <span class="file-chosen" style="margin-left:10px; font-size:14px; color:#222;">No file chosen</span>
+                               {% if parser.id == 'bank' %}accept=".xls,.xlsx,.csv"{% endif %} required>
+                        <span class="file-chosen" style="font-size:14px; color:#222;">No file chosen</span>
                     </div>
                     <div class="parser-row" id="{{parser.id}}-sheetRow" style="display:none;">
                         <label class="parser-label">Select Sheet</label>
@@ -133,7 +133,7 @@
                         </select>
                     </div>
                     <div class="parser-row parser-row-parse">
-                        <button type="submit" class="parser-parse-btn" id="{{parser.id}}-parseBtn" disabled>Parse</button>
+                        <button type="submit" class="btn btn-primary btn-sm" id="{{parser.id}}-parseBtn" disabled>Parse</button>
                     </div>
                 </form>
                 <div id="{{parser.id}}-msgDiv" style="color: red; margin-top:10px"></div>
@@ -148,20 +148,17 @@
                 <h2>Bank-Fin Match</h2>
                 <form id="reconcile-form" class="parser-form" autocomplete="off">
                     <div class="parser-row">
-                        <label class="parser-label">Bank Table</label>
+                        <label class="parser-label">Bank Code</label>
                         <select name="bank_code" class="parser-input" id="bank-code-select" required>
                             <option value="">-- Select Bank --</option>
                         </select>
-
-                    </div>
-                    <div class="parser-row">
-                        <label class="parser-label">Account Number</label>
+                        <label class="parser-label" style="margin-left: 20px;">Account Number</label>
                         <select name="account_number" class="parser-input" id="account-number-select" required>
                             <option value="">-- Select Account --</option>
                         </select>
                     </div>
                     <div class="parser-row parser-row-parse">
-                        <button type="submit" class="parser-parse-btn" id="reconcile-btn">Reconcile</button>
+                        <button type="submit" class="btn btn-primary btn-sm" id="reconcile-btn">Reconcile</button>
                     </div>
                 </form>
                 <div id="reconcile-result" style="margin-top:20px;"></div>
@@ -178,16 +175,13 @@
                         <select name="bank_code" class="parser-input" id="bft-bank-code-select" required>
                             <option value="">-- Select Bank --</option>
                         </select>
-
-                    </div>
-                    <div class="parser-row">
-                        <label class="parser-label">Account Number</label>
+                        <label class="parser-label" style="margin-left: 20px;">Account Number</label>
                         <select name="account_number" class="parser-input" id="bft-account-number-select" required>
                             <option value="">-- Select Account --</option>
                         </select>
                     </div>
                     <div class="parser-row parser-row-parse">
-                        <button type="submit" class="parser-parse-btn" id="bft-reconcile-btn">Reconcile</button>
+                        <button type="submit" class="btn btn-primary btn-sm" id="bft-reconcile-btn">Reconcile</button>
                     </div>
                 </form>
                 <div id="bft-reconcile-result" style="margin-top:20px;"></div>
@@ -204,16 +198,13 @@
                         <select name="bank_code" class="parser-input" id="bank-tally-bank-code-select" required>
                             <option value="">-- Select Bank --</option>
                         </select>
-
-                    </div>
-                    <div class="parser-row">
-                        <label class="parser-label">Account Number</label>
+                        <label class="parser-label" style="margin-left: 20px;">Account Number</label>
                         <select name="account_number" class="parser-input" id="bank-tally-account-number-select" required>
                             <option value="">-- Select Account --</option>
                         </select>
                     </div>
                     <div class="parser-row parser-row-parse">
-                        <button type="submit" class="parser-parse-btn" id="bank-tally-reconcile-btn">Reconcile</button>
+                        <button type="submit" class="btn btn-primary btn-sm" id="bank-tally-reconcile-btn">Reconcile</button>
                     </div>
                 </form>
                 <div id="bank-tally-reconcile-result" style="margin-top:20px;"></div>
@@ -252,7 +243,7 @@
                         </div>
                     </div>
                     <div class="parser-row parser-row-parse">
-                        <button type="submit" class="parser-parse-btn" id="unmatched-bank-btn">Generate Report</button>
+                        <button type="submit" class="btn btn-primary btn-sm" id="unmatched-bank-btn">Generate Report</button>
                     </div>
                 </form>
                 <div id="unmatched-bank-result" style="margin-top:20px;"></div>
@@ -290,7 +281,7 @@
                         </div>
                     </div>
                     <div class="parser-row parser-row-parse">
-                        <button type="submit" class="parser-parse-btn" id="unmatched-tally-btn">Generate Report</button>
+                        <button type="submit" class="btn btn-primary btn-sm" id="unmatched-tally-btn">Generate Report</button>
                     </div>
                 </form>
                 <div id="unmatched-tally-result" style="margin-top:20px;"></div>
@@ -328,8 +319,8 @@
                         </div>
                     </div>
                     <div class="parser-row parser-row-parse">
-                        <button type="submit" class="parser-parse-btn" id="bank-fin-matched-btn">Generate Report</button>
-                        <button type="button" class="parser-parse-btn" id="bank-fin-matched-excel-btn">Download Excel</button>
+                        <button type="submit" class="btn btn-primary btn-sm" id="bank-fin-matched-btn">Generate Report</button>
+                        <button type="button" class="btn btn-primary btn-sm" id="bank-fin-matched-excel-btn">Download Excel</button>
                     </div>
                 </form>
                 <div id="bank-fin-matched-result" style="margin-top:20px;"></div>
@@ -367,8 +358,8 @@
                         </div>
                     </div>
                     <div class="parser-row parser-row-parse">
-                        <button type="submit" class="parser-parse-btn" id="bank-fin-tally-matched-btn">Generate Report</button>
-                        <button type="button" class="parser-parse-btn" id="bank-fin-tally-matched-excel-btn">Download Excel</button>
+                        <button type="submit" class="btn btn-primary btn-sm" id="bank-fin-tally-matched-btn">Generate Report</button>
+                        <button type="button" class="btn btn-primary btn-sm" id="bank-fin-tally-matched-excel-btn">Download Excel</button>
                     </div>
                 </form>
                 <div id="bank-fin-tally-matched-result" style="margin-top:20px;"></div>
@@ -406,8 +397,8 @@
                         </div>
                     </div>
                     <div class="parser-row parser-row-parse">
-                        <button type="submit" class="parser-parse-btn" id="bank-tally-matched-btn">Generate Report</button>
-                        <button type="button" class="parser-parse-btn" id="bank-tally-matched-excel-btn">Download Excel</button>
+                        <button type="submit" class="btn btn-primary btn-sm" id="bank-tally-matched-btn">Generate Report</button>
+                        <button type="button" class="btn btn-primary btn-sm" id="bank-tally-matched-excel-btn">Download Excel</button>
                     </div>
                 </form>
                 <div id="bank-tally-matched-result" style="margin-top:20px;"></div>
@@ -467,7 +458,7 @@
                             <option value="0">No</option>
                         </select>
                     </div>
-                    <button type="button" class="parser-parse-btn" id="bank-data-table-reset-btn" style="margin-left: 10px;">Reset Filters</button>
+                    <button type="button" class="btn btn-secondary btn-sm" id="bank-data-table-reset-btn" style="margin-left: 10px;">Reset Filters</button>
                 </div>
                 <div id="bank-data-table-result" style="margin-top:20px;"></div>
             </div>
@@ -516,7 +507,7 @@
                             <option value="0">No</option>
                         </select>
                     </div>
-                    <button type="button" class="parser-parse-btn" id="tally-data-table-reset-btn" style="margin-left: 10px;">Reset Filters</button>
+                    <button type="button" class="btn btn-secondary btn-sm" id="tally-data-table-reset-btn" style="margin-left: 10px;">Reset Filters</button>
                 </div>
                 <div id="tally-data-table-result" style="margin-top:20px;"></div>
             </div>
@@ -573,7 +564,7 @@
                             <option value="0">No</option>
                         </select>
                     </div>
-                    <button type="button" class="parser-parse-btn" id="finance-data-table-reset-btn" style="margin-left: 10px;">Reset Filters</button>
+                    <button type="button" class="btn btn-secondary btn-sm" id="finance-data-table-reset-btn" style="margin-left: 10px;">Reset Filters</button>
                 </div>
                 <div id="finance-data-table-result" style="margin-top:20px;"></div>
             </div>
