@@ -7,6 +7,7 @@ from routes.bank_fin_reconcile_routes import bank_fin_reconcile_bp
 from routes.bank_fin_tally_reconcile_routes import bank_fin_tally_reconcile_bp
 from routes.bank_tally_reconcile_routes import bank_tally_bp
 from routes.reports_routes import reports_bp
+from routes.data_management_routes import data_management_bp
 
 app = Flask(__name__)
 app.secret_key = 'a_random_secret'
@@ -18,6 +19,7 @@ app.register_blueprint(bank_fin_reconcile_bp)
 app.register_blueprint(bank_fin_tally_reconcile_bp)
 app.register_blueprint(bank_tally_bp)
 app.register_blueprint(reports_bp)
+app.register_blueprint(data_management_bp)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -74,6 +74,19 @@
                 </div>
             </div>
         </div>
+        <!-- Data Management -->
+        <div class="menu-group">
+            <a class="menu-item d-flex align-items-center justify-content-between fw-bold" data-bs-toggle="collapse" href="#dataManagementMenu" role="button" aria-expanded="false" aria-controls="dataManagementMenu">
+                <span class="d-flex align-items-center"><i class="bi bi-gear me-2"></i> Data Management</span>
+                <i class="bi bi-chevron-down ms-2"></i>
+            </a>
+            <div class="collapse" id="dataManagementMenu">
+                <div class="submenu-list">
+                    <a class="submenu-item" href="#" onclick="showTab('truncate-data')">Truncate Data</a>
+                    <a class="submenu-item" href="#" onclick="showTab('reset-matches')">Reset Matches</a>
+                </div>
+            </div>
+        </div>
         <!-- Help (Standalone) -->
         <div class="menu-group">
             <a class="menu-item d-flex align-items-center justify-content-between fw-bold" data-bs-toggle="collapse" href="#helpMenu" role="button" aria-expanded="false" aria-controls="helpMenu">
@@ -569,6 +582,94 @@
                     <button type="button" class="btn btn-secondary btn-sm" id="finance-data-table-reset-btn" style="margin-left: 10px;">Reset Filters</button>
                 </div>
                 <div id="finance-data-table-result" style="margin-top:20px;"></div>
+            </div>
+        </div>
+
+        <!-- Truncate Data Tab -->
+        <div class="tab-pane" id="pane-truncate-data" style="display:none;">
+            <div class="parser-container">
+                <h2>Truncate Data</h2>
+                <div class="alert alert-warning" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <strong>Warning:</strong> Truncating tables will permanently delete all data. This action cannot be undone!
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5 class="mb-0">Individual Tables</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2 d-md-block">
+                            <button type="button" class="btn btn-danger btn-sm me-2" onclick="confirmTruncate('fin_data', 'Finance Data')">
+                                <i class="bi bi-trash me-1"></i> Truncate Finance Data
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm me-2" onclick="confirmTruncate('bank_data', 'Bank Data')">
+                                <i class="bi bi-trash me-1"></i> Truncate Bank Data
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm me-2" onclick="confirmTruncate('tally_data', 'Tally Data')">
+                                <i class="bi bi-trash me-1"></i> Truncate Tally Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0 text-danger">Danger Zone</h5>
+                    </div>
+                    <div class="card-body">
+                        <button type="button" class="btn btn-danger btn-sm" onclick="confirmTruncate('all', 'All Data')">
+                            <i class="bi bi-exclamation-triangle me-1"></i> Truncate All Data
+                        </button>
+                        <small class="text-muted d-block mt-2">This will delete all data from all tables including match results.</small>
+                    </div>
+                </div>
+
+                <div id="truncate-result" style="margin-top:20px;"></div>
+            </div>
+        </div>
+
+        <!-- Reset Matches Tab -->
+        <div class="tab-pane" id="pane-reset-matches" style="display:none;">
+            <div class="parser-container">
+                <h2>Reset Match Flags</h2>
+                <div class="alert alert-info" role="alert">
+                    <i class="bi bi-info-circle-fill me-2"></i>
+                    <strong>Info:</strong> Resetting match flags will clear match status from data tables but preserve the original data.
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5 class="mb-0">Individual Match Types</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2 d-md-block">
+                            <button type="button" class="btn btn-warning btn-sm me-2" onclick="confirmResetMatches('bank_fin', 'Bank-Fin Match flags')">
+                                <i class="bi bi-arrow-clockwise me-1"></i> Reset Bank-Fin Matches
+                            </button>
+                            <button type="button" class="btn btn-warning btn-sm me-2" onclick="confirmResetMatches('bank_fin_tally', 'Bank-Fin-Tally Match flags')">
+                                <i class="bi bi-arrow-clockwise me-1"></i> Reset Bank-Fin-Tally Matches
+                            </button>
+                            <button type="button" class="btn btn-warning btn-sm me-2" onclick="confirmResetMatches('bank_tally', 'Bank-Tally Match flags')">
+                                <i class="bi bi-arrow-clockwise me-1"></i> Reset Bank-Tally Matches
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0 text-warning">Reset All</h5>
+                    </div>
+                    <div class="card-body">
+                        <button type="button" class="btn btn-warning btn-sm" onclick="confirmResetMatches('all', 'All Match flags')">
+                            <i class="bi bi-arrow-clockwise me-1"></i> Reset All Matches
+                        </button>
+                        <small class="text-muted d-block mt-2">This will reset all match flags from all tables and clear match result tables.</small>
+                    </div>
+                </div>
+
+                <div id="reset-matches-result" style="margin-top:20px;"></div>
             </div>
         </div>
 

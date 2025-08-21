@@ -2322,6 +2322,106 @@ function ensureTableFitViewport(tableElement) {
     }
 }
 
+// --- Data Management Functions ---
 
+// Confirm and execute table truncation
+function confirmTruncate(tableType, tableName) {
+    const message = tableType === 'all' 
+        ? `Are you sure you want to truncate ALL data tables? This will permanently delete all data including:\n\n• Bank Data\n• Finance Data\n• Tally Data\n• All Match Results\n\nThis action CANNOT be undone!`
+        : `Are you sure you want to truncate the ${tableName} table? This will permanently delete all data in this table.\n\nThis action CANNOT be undone!`;
+    
+    if (confirm(message)) {
+        if (tableType === 'all') {
+            const finalConfirm = confirm('⚠️ FINAL WARNING ⚠️\n\nYou are about to delete ALL DATA from ALL TABLES.\n\nClick OK only if you are absolutely certain you want to proceed.');
+            if (!finalConfirm) return;
+        }
+        
+        executeTruncate(tableType, tableName);
+    }
+}
 
+// Execute truncation request
+function executeTruncate(tableType, tableName) {
+    const resultDiv = document.getElementById('truncate-result');
+    resultDiv.innerHTML = '<div class="alert alert-info">Processing truncation request...</div>';
+    
+    fetch('/truncate_data', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            table_type: tableType
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            resultDiv.innerHTML = `<div class="alert alert-success">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <strong>Success:</strong> ${data.message}
+            </div>`;
+        } else {
+            resultDiv.innerHTML = `<div class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <strong>Error:</strong> ${data.message}
+            </div>`;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        resultDiv.innerHTML = `<div class="alert alert-danger">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <strong>Error:</strong> Failed to communicate with server
+        </div>`;
+    });
+}
+
+// Confirm and execute match flag reset
+function confirmResetMatches(matchType, matchName) {
+    const message = matchType === 'all'
+        ? `Are you sure you want to reset ALL match flags? This will:\n\n• Clear all match flags from Bank, Finance, and Tally data tables\n• Delete all entries from match result tables (bf_matched, bft_matched, bt_matched)\n\nOriginal data will be preserved, but all matching work will be lost.`
+        : `Are you sure you want to reset ${matchName}? This will clear the match flags and delete related match results.\n\nOriginal data will be preserved, but matching work for this type will be lost.`;
+    
+    if (confirm(message)) {
+        executeResetMatches(matchType, matchName);
+    }
+}
+
+// Execute reset matches request
+function executeResetMatches(matchType, matchName) {
+    const resultDiv = document.getElementById('reset-matches-result');
+    resultDiv.innerHTML = '<div class="alert alert-info">Processing reset request...</div>';
+    
+    fetch('/reset_matches', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            match_type: matchType
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            resultDiv.innerHTML = `<div class="alert alert-success">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <strong>Success:</strong> ${data.message}
+            </div>`;
+        } else {
+            resultDiv.innerHTML = `<div class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <strong>Error:</strong> ${data.message}
+            </div>`;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        resultDiv.innerHTML = `<div class="alert alert-danger">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <strong>Error:</strong> Failed to communicate with server
+        </div>`;
+    });
+}
 
