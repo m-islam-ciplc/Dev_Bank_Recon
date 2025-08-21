@@ -486,3 +486,81 @@ h1, h2, h3, h4, h5, h6 {
     width: 150px;
     max-width: 200px;
 }
+
+/* Parse button styling - wider and different color (Tally, Bank, Finance tabs only) */
+#pane-tally button[type="submit"],
+#pane-bank button[type="submit"],
+#pane-finance button[type="submit"],
+#pane-tally .btn-success,
+#pane-bank .btn-success,
+#pane-finance .btn-success {
+    min-width: 120px !important;
+    width: 120px !important;
+    background-color: #28a745 !important;
+    border-color: #28a745 !important;
+    color: white !important;
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+}
+
+#pane-tally button[type="submit"]:hover,
+#pane-bank button[type="submit"]:hover,
+#pane-finance button[type="submit"]:hover,
+#pane-tally .btn-success:hover,
+#pane-bank .btn-success:hover,
+#pane-finance .btn-success:hover {
+    background-color: #218838 !important;
+    border-color: #1e7e34 !important;
+}
+
+#pane-tally button[type="submit"]:active,
+#pane-bank button[type="submit"]:active,
+#pane-finance button[type="submit"]:active,
+#pane-tally .btn-success:active,
+#pane-bank .btn-success:active,
+#pane-finance .btn-success:active {
+    background-color: #1e7e34 !important;
+    border-color: #1c7430 !important;
+}
+
+#pane-tally button[type="submit"]:focus,
+#pane-bank button[type="submit"]:focus,
+#pane-finance button[type="submit"]:focus,
+#pane-tally .btn-success:focus,
+#pane-bank .btn-success:focus,
+#pane-finance .btn-success:focus {
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+}
+
+/* Ensure Parse buttons maintain their styling even when disabled (Tally, Bank, Finance tabs only) */
+#pane-tally button[type="submit"]:disabled,
+#pane-bank button[type="submit"]:disabled,
+#pane-finance button[type="submit"]:disabled,
+#pane-tally .btn-success:disabled,
+#pane-bank .btn-success:disabled,
+#pane-finance .btn-success:disabled {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+    color: white !important;
+    opacity: 0.65;
+}
+
+/* Select Bank and Select File buttons - same width (Tally, Bank, Finance tabs only) */
+#pane-tally .btn-primary,
+#pane-bank .btn-primary,
+#pane-finance .btn-primary,
+#pane-tally .btn-secondary,
+#pane-bank .btn-secondary,
+#pane-finance .btn-secondary {
+    min-width: 120px !important;
+    width: 120px !important;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+}

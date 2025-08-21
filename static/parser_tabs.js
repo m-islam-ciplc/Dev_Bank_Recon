@@ -8,9 +8,9 @@ function showTab(tabId) {
     // Only set data-active for elements that exist (data table tabs)
     const btnElement = document.getElementById('btn-' + tabId);
     if (btnElement) {
-        document.querySelectorAll('.tab-btn').forEach(function(btn) {
-            btn.removeAttribute('data-active');
-        });
+    document.querySelectorAll('.tab-btn').forEach(function(btn) {
+        btn.removeAttribute('data-active');
+    });
         btnElement.setAttribute('data-active','1');
     }
     
@@ -2165,14 +2165,14 @@ if (document.getElementById('bank-data-table-bank-code-select')) {
     document.getElementById('bank-data-table-bank-code-select').addEventListener('change', function() {
         const bankCode = this.value;
         populateAccountDropdown('bank-data-table-acct-no-select', bankCode);
-    });
+        });
 }
 // --- Data Tables: Tally Data Table ---
 if (document.getElementById('tally-data-table-bank-code-select')) {
     document.getElementById('tally-data-table-bank-code-select').addEventListener('change', function() {
         const bankCode = this.value;
         populateAccountDropdown('tally-data-table-acct-no-select', bankCode);
-    });
+        });
 }
 // --- Data Tables: Finance Data Table ---
 if (document.getElementById('finance-data-table-bank-code-select')) {
@@ -2181,7 +2181,7 @@ if (document.getElementById('finance-data-table-bank-code-select')) {
         populateAccountDropdown('finance-data-table-acct-no-select', bankCode, `/get_fin_data_acct_nos?bank_code=${encodeURIComponent(bankCode)}`);
         populateMonthDropdown('finance-data-table-statement-month-select', bankCode, `/get_fin_data_statement_months?bank_code=${encodeURIComponent(bankCode)}`);
         populateYearDropdown('finance-data-table-statement-year-select', bankCode, `/get_fin_data_statement_years?bank_code=${encodeURIComponent(bankCode)}`);
-    });
+        });
 }
 
 // --- Data Tables: Bank Data Table Form Submission ---
