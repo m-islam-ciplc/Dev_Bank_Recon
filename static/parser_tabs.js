@@ -705,7 +705,7 @@ document.getElementById('reconcile-form').addEventListener('submit', function(e)
     e.preventDefault();
     const btn = document.getElementById('reconcile-btn');
     btn.disabled = true;
-    btn.textContent = 'Reconciling...';
+    btn.textContent = 'Matching...';
     const resultDiv = document.getElementById('reconcile-result');
     resultDiv.textContent = 'Working...';
 
@@ -737,7 +737,7 @@ document.getElementById('reconcile-form').addEventListener('submit', function(e)
     })
     .finally(() => {
         btn.disabled = false;
-        btn.textContent = 'Reconcile';
+        btn.textContent = 'Match Transactions';
     });
 });
 
@@ -784,7 +784,7 @@ document.getElementById('bft-reconcile-form').addEventListener('submit', functio
     e.preventDefault();
     const btn = document.getElementById('bft-reconcile-btn');
     btn.disabled = true;
-    btn.textContent = 'Reconciling...';
+    btn.textContent = 'Matching...';
     const resultDiv = document.getElementById('bft-reconcile-result');
     resultDiv.textContent = 'Working...';
 
@@ -816,7 +816,7 @@ document.getElementById('bft-reconcile-form').addEventListener('submit', functio
     })
     .finally(() => {
         btn.disabled = false;
-        btn.textContent = 'Reconcile';
+        btn.textContent = 'Match Transactions';
     });
 });
 
@@ -862,7 +862,7 @@ document.getElementById('bank-tally-reconcile-form').addEventListener('submit', 
     e.preventDefault();
     const btn = document.getElementById('bank-tally-reconcile-btn');
     btn.disabled = true;
-    btn.textContent = 'Reconciling...';
+    btn.textContent = 'Matching...';
     const resultDiv = document.getElementById('bank-tally-reconcile-result');
     resultDiv.textContent = 'Working...';
 
@@ -891,7 +891,7 @@ document.getElementById('bank-tally-reconcile-form').addEventListener('submit', 
     })
     .finally(() => {
         btn.disabled = false;
-        btn.textContent = 'Reconcile';
+        btn.textContent = 'Match Transactions';
     });
 
 });
